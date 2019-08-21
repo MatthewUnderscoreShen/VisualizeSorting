@@ -29,10 +29,10 @@ public class SortingAlgorithm{
         }
     }
 
-    public LinkedList runQuick(LinkedList<Integer> array){
-        LinkedList<Integer> lowArray = new LinkedList();
-        LinkedList<Integer> highArray = new LinkedList();
-        LinkedList<Integer> finalArray = new LinkedList();
+    public LinkedList<Integer> runQuick(LinkedList<Integer> array){
+        LinkedList<Integer> lowArray = new LinkedList<Integer>();
+        LinkedList<Integer> highArray = new LinkedList<Integer>();
+        LinkedList<Integer> finalArray = new LinkedList<Integer>();
         int pivotIndex = util.random.nextInt(array.size());
 
         for(int number : array){
