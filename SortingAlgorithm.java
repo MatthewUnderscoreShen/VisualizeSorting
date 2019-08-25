@@ -8,6 +8,7 @@ public class SortingAlgorithm {
     //The goal here is to use arrays for all of them
     //Ideally I never have to venture into Set hell
 
+    //Init theArray in the superconstructor
     public SortingAlgorithm(int size, int lBound, int rBound, Visual vis) {
         this.vis = vis;
         theArray = new int[size];
@@ -15,6 +16,7 @@ public class SortingAlgorithm {
             theArray[i] = lBound + rand.nextInt(rBound - lBound);
     }
 
+    //Every algorithm overrides this
     public void run() {}
 
     public int[] getArray() { //Temporary
@@ -22,6 +24,11 @@ public class SortingAlgorithm {
     }
 }
 
+/*
+    Works by comparing two neighboring numbers and swapping them if the lower
+    one is larger. This brings the largest number to the end of the array
+    every loop, eventually sorting the array.
+*/
 class BubbleSort extends SortingAlgorithm {
     int holder, limit;
 
@@ -48,6 +55,14 @@ class BubbleSort extends SortingAlgorithm {
     }
 }
 
+/*
+    Works by dividing the array into two parts, greater than the pivot and less
+    than the pivot. It then does the same to each of the two parts, and eventually
+    you have to divide an array with a size of either two or one, at which you're
+    guaranteed to have a sorted array.
+    Sorry, that was a poor explaination. Watch a youtube video or something, 
+    it makes more sense visualized.
+*/
 class QuickSort extends SortingAlgorithm {
     int[] copy;
     int pivot, pivIndex, topIndex, leftBound, rightBound; //Sorry for repeating variables
@@ -134,5 +149,12 @@ class QuickSort extends SortingAlgorithm {
     private void updateTheArray() {
         for (int i = 0; i < copy.length; i++)
             theArray[leftBound + i] = copy[i];
+    }
+}
+
+class MergeSort extends SortingAlgorithm {
+
+    public MergeSort(int size, int lBound, int rBound, Visual vis) {
+        super(size, lBound, rBound, vis);
     }
 }
