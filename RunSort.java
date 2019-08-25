@@ -1,18 +1,35 @@
 public class RunSort{
-    static SortingAlgorithm sort = new SortingAlgorithm();
+    static SortingAlgorithm sort;
+    static Visual vis = new Visual();
     static Util util = new Util();
-    public static void main(String[] args){
-        int[] IA = util.getInput();
-        int[] array = util.getRandomArray(IA[1], IA[2], IA[3]);
-        util.printArray(array);
 
-        int[] sortedArray = null;
-        switch(IA[0]){
+    public static void main(String[] args) throws Exception{
+        //Past here needs changes
+        System.out.println("Select Sort:");
+        //See if you can use a hashmap or something
+        System.out.println("\t1) Bubble");
+        System.out.println("\t2) Quick");
+        System.out.println("\nInput: Sort type, array length, left bound, right bound");
+
+        int[] IA = util.getInput(", "); //"Input Array"
+
+        switch (IA[0]) {
             case 1:
-                sortedArray = sort.runBubble(array, 0, false);
+                sort = new BubbleSort(IA[1], IA[2], IA[3], vis);
+                break;
             case 2:
-                sortedArray = util.linkedListToIntArray(sort.runQuick(util.intArrayToLinkedList(array)));
+                sort = new QuickSort(IA[1], IA[2], IA[3], vis);
+                break;
+            default:
+                System.out.println("???");
         }
-        util.printArray(sortedArray);
+
+        int[] printMe = sort.getArray();
+        util.printArray(printMe);
+
+        sort.run();
+
+        printMe = sort.getArray();
+        util.printArray(printMe);
     }
 }

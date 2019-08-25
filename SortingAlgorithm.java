@@ -1,67 +1,143 @@
-import java.util.LinkedList;
+import java.util.Random;
 
-public class SortingAlgorithm{
+public class SortingAlgorithm {
+    Visual vis;
+    Random rand = new Random();
     Util util = new Util();
+    int[] theArray;
+    //The goal here is to use arrays for all of them
+    //Ideally I never have to venture into Set hell
 
-    public int[] runBubble(int[] array, int counter, boolean hasSwitched){
-        if(util.isSorted(array)){
-            return array;
-        }
-        if(counter == array.length - 1){
-            if(hasSwitched){
-                return runBubble(array, 0, false);
-            } else{
-                return array;
-            }
-        }
-        
-        int a = array[counter];
-        int b = array[counter + 1];
-
-        if(a > b){
-            array[counter] = b;
-            array[counter + 1] = a;
-            counter++;
-            return runBubble(array, counter, true);
-        } else{
-            counter++;
-            return runBubble(array, counter, hasSwitched);
-        }
+    public SortingAlgorithm(int size, int lBound, int rBound, Visual vis) {
+        this.vis = vis;
+        theArray = new int[size];
+        for (int i = 0; i < theArray.length; i++)
+            theArray[i] = lBound + rand.nextInt(rBound - lBound);
     }
 
-    public LinkedList<Integer> runQuick(LinkedList<Integer> array){
-        LinkedList<Integer> lowArray = new LinkedList<Integer>();
-        LinkedList<Integer> highArray = new LinkedList<Integer>();
-        LinkedList<Integer> finalArray = new LinkedList<Integer>();
-        int pivotIndex = util.random.nextInt(array.size());
+    public void run() {}
 
-        for(int number : array){
-            if((int)number < (int)array.get(pivotIndex)){
-                lowArray.add(number);
-            } else{
-                highArray.add(number);
-            }
-        }
+    public int[] getArray() { //Temporary
+        return theArray;
+    }
+}
 
-        if(!util.isSorted(util.linkedListToIntArray(lowArray))){
-            lowArray = runQuick(lowArray);
-        } if(!util.isSorted(util.linkedListToIntArray(highArray))){
-            highArray = runQuick(highArray);
-        }
+class BubbleSort extends SortingAlgorithm {
+    int holder, limit;
 
-        int a = lowArray.size();
-        int b = highArray.size();
-
-        for(int i = 0; i < a; i++){
-            finalArray.add(lowArray.pop());
-        } for(int j = 0; j < b; j++){
-            finalArray.add(highArray.pop());
-        }
-
-        return finalArray;
+    public BubbleSort(int size, int lBound, int rBound, Visual vis) {
+        super(size, lBound, rBound, vis);
+        limit = theArray.length;
     }
 
-    public void runMerge(int[] array){
-        
+    @Override
+    public void run() {
+        for (int i = 0; i < theArray.length; i++) {
+            for (int j = 0; j < limit-1; j++) {
+                //Compares two neighboring numbers
+                //Switches if the first one is smaller
+                if (theArray[j] > theArray[j+1]) {
+                    holder = theArray[j];
+                    theArray[j] = theArray[j+1];
+                    theArray[j+1] = holder;
+                }
+                //vis.updateVisual();
+            }
+            limit--;
+        }
+    }
+}
+
+class QuickSort extends SortingAlgorithm {
+    int[] copy;
+    int pivot, pivIndex, topIndex, leftBound, rightBound; //Sorry for repeating variables
+    //pivIndex starts from the bottom. topIndex from the top
+
+    public QuickSort(int size, int lBound, int rBound, Visual vis) {
+        super(size, lBound, rBound, vis);
+        leftBound = 0;
+        rightBound = theArray.length;
+    }
+
+    //Works on a system of changing the area of operation in theArray
+    @Override
+    public void run() {
+        int leftHold;
+        int rightHold;
+        //rightBound is the only variable that holds the right bound for the
+        //highArray, and it gets set to the right bound for the lowArray, 
+        //so I hold its original value in rightHold
+        //The same applies with leftHold since pivIndex is changed during
+        //The running of the lowArray
+
+        //Reset variables
+        copy = new int[rightBound - leftBound];
+        pivIndex = leftBound;
+        topIndex = rightBound;
+        rightHold = rightBound;
+
+        System.out.println();
+        util.printArray(theArray);
+        System.out.println();
+
+        //Split into 2 parts
+        pivot = getPivot();
+        for (int i = leftBound; i < rightBound; i++) {
+            //Splits array into 2 parts, greater or less than the pivot
+            if (theArray[i] <= pivot) {
+                copy[pivIndex - leftBound] = theArray[i];
+                pivIndex++;
+            }
+            else
+                copy[--topIndex - leftBound] = theArray[i];
+            //vis.updateVisual();
+            util.printArray(copy);
+            System.out.print("\t" + pivot + " / " + leftBound + ", " + rightBound + " / " + pivIndex + ", " + rightHold);
+        }
+        updateTheArray();
+
+        //Setting hold values
+        rightHold = rightBound;
+        leftHold = pivIndex;
+
+        //At length = 2, it's (probably) guaranteed to be sorted
+        if ((rightBound - leftBound) <= 2)
+            return;
+
+        //Repeat on the two new parts
+        //Figuring out this part is a nightmare
+        //Lower half
+        leftBound = 0;
+        rightBound = pivIndex;
+        run();
+        //Upper half
+        leftBound = leftHold;
+        rightBound = rightHold;
+        run();
+
+        //End
+    }
+
+    private int getPivot() {
+        //The pivot is just inbetween min and max
+        int min, max;
+        min = theArray[leftBound];
+        max = theArray[leftBound];
+
+        for (int i = leftBound; i < rightBound; i++) {
+            if (theArray[i] < min)
+                min = theArray[i];
+            if (theArray[i] > max)
+                max = theArray[i];
+        }
+        //If the array size is 2, and say the two numbers are 1 and 2
+        //the pivot will be 1 so above when I split the array,
+        //I needed to have the operator be <=
+        return (min + max) / 2;
+    }
+
+    private void updateTheArray() {
+        for (int i = 0; i < copy.length; i++)
+            theArray[leftBound + i] = copy[i];
     }
 }
