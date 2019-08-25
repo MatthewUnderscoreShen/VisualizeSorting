@@ -1,9 +1,11 @@
 public class RunSort{
     static SortingAlgorithm sort;
-    static Visual vis = new Visual();
+    static Visual vis;
     static Util util = new Util();
 
     public static void main(String[] args) throws Exception{
+        vis = new Visual();
+        /*
         //Past here needs changes
         System.out.println("Select Sort:");
         //See if you can use a hashmap or something
@@ -32,5 +34,6 @@ public class RunSort{
         printMe = sort.getArray();
         System.out.println();
         util.printArray(printMe);
+        */
     }
 }
