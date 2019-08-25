@@ -30,6 +30,7 @@ public class RunSort{
         sort.run();
 
         printMe = sort.getArray();
+        System.out.println();
         util.printArray(printMe);
     }
 }

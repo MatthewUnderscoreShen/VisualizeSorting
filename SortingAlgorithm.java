@@ -63,6 +63,7 @@ class QuickSort extends SortingAlgorithm {
     @Override
     public void run() {
         int leftHold;
+        int pivHold;
         int rightHold;
         //rightBound is the only variable that holds the right bound for the
         //highArray, and it gets set to the right bound for the lowArray, 
@@ -74,11 +75,6 @@ class QuickSort extends SortingAlgorithm {
         copy = new int[rightBound - leftBound];
         pivIndex = leftBound;
         topIndex = rightBound;
-        rightHold = rightBound;
-
-        System.out.println();
-        util.printArray(theArray);
-        System.out.println();
 
         //Split into 2 parts
         pivot = getPivot();
@@ -91,14 +87,13 @@ class QuickSort extends SortingAlgorithm {
             else
                 copy[--topIndex - leftBound] = theArray[i];
             //vis.updateVisual();
-            util.printArray(copy);
-            System.out.print("\t" + pivot + " / " + leftBound + ", " + rightBound + " / " + pivIndex + ", " + rightHold);
         }
         updateTheArray();
 
         //Setting hold values
         rightHold = rightBound;
-        leftHold = pivIndex;
+        pivHold = pivIndex;
+        leftHold = leftBound;
 
         //At length = 2, it's (probably) guaranteed to be sorted
         if ((rightBound - leftBound) <= 2)
@@ -107,11 +102,11 @@ class QuickSort extends SortingAlgorithm {
         //Repeat on the two new parts
         //Figuring out this part is a nightmare
         //Lower half
-        leftBound = 0;
-        rightBound = pivIndex;
+        leftBound = leftHold;
+        rightBound = pivHold;
         run();
         //Upper half
-        leftBound = leftHold;
+        leftBound = pivHold;
         rightBound = rightHold;
         run();
 
