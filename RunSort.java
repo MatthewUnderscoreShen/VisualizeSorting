@@ -5,6 +5,10 @@ public class RunSort{
 
     public static void main(String[] args) throws Exception{
         vis = new Visual();
+
+        vis.prepare();
+        //Check settings, wait for button press
+
         /*
         //Past here needs changes
         System.out.println("Select Sort:");

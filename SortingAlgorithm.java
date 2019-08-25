@@ -9,11 +9,17 @@ public class SortingAlgorithm {
     //Ideally I never have to venture into Set hell
 
     //Init theArray in the superconstructor
-    public SortingAlgorithm(int size, int lBound, int rBound, Visual vis) {
+    public SortingAlgorithm(int size, int lBound, int rBound, boolean isRandom, Visual vis) {
         this.vis = vis;
         theArray = new int[size];
-        for (int i = 0; i < theArray.length; i++)
-            theArray[i] = lBound + rand.nextInt(rBound - lBound);
+        if (isRandom) {
+            for (int i = 0; i < theArray.length; i++)
+                theArray[i] = lBound + rand.nextInt(rBound - lBound);
+        }
+        else {
+            for (int i = 0; i < theArray.length; i++)
+                theArray[i] = lBound++;
+        }
     }
 
     //Every algorithm overrides this
@@ -32,8 +38,8 @@ public class SortingAlgorithm {
 class BubbleSort extends SortingAlgorithm {
     int holder, limit;
 
-    public BubbleSort(int size, int lBound, int rBound, Visual vis) {
-        super(size, lBound, rBound, vis);
+    public BubbleSort(int size, int lBound, int rBound, boolean isRandom, Visual vis) {
+        super(size, lBound, rBound, isRandom, vis);
         limit = theArray.length;
     }
 
@@ -68,8 +74,8 @@ class QuickSort extends SortingAlgorithm {
     int pivot, pivIndex, topIndex, leftBound, rightBound; //Sorry for repeating variables
     //pivIndex starts from the bottom. topIndex from the top
 
-    public QuickSort(int size, int lBound, int rBound, Visual vis) {
-        super(size, lBound, rBound, vis);
+    public QuickSort(int size, int lBound, int rBound, boolean isRandom, Visual vis) {
+        super(size, lBound, rBound, isRandom, vis);
         leftBound = 0;
         rightBound = theArray.length;
     }
@@ -154,7 +160,7 @@ class QuickSort extends SortingAlgorithm {
 
 class MergeSort extends SortingAlgorithm {
 
-    public MergeSort(int size, int lBound, int rBound, Visual vis) {
-        super(size, lBound, rBound, vis);
+    public MergeSort(int size, int lBound, int rBound, boolean isRandom, Visual vis) {
+        super(size, lBound, rBound, isRandom, vis);
     }
 }
