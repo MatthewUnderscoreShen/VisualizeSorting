@@ -1,4 +1,7 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
 import javax.swing.*;
 
 public class Visual {
@@ -9,9 +12,7 @@ public class Visual {
     String[] typeList = {"Continuous", "Random"};
 
     JComboBox<String> sortBox;
-    JTextField sizeField;
-    JTextField lBoundField;
-    JTextField rBoundField;
+    
     JComboBox<String> typeBox;
     JButton startButton;
 
@@ -19,7 +20,6 @@ public class Visual {
     int size, lBound, rBound;
 
     int[] cellArray;
-    int cells;
 
     public Visual() {
         initFrame();
@@ -34,23 +34,40 @@ public class Visual {
         c = new Canvas() {
             public void paint(Graphics g) {}
         };
-        //c.setBackground(Color.BLACK);
+        c.setBackground(Color.BLACK);
 
         //Setting part
         JPanel oPanel = new JPanel();
+
+        JButton updateButton = new JButton("Apply");
+
         sortBox = new JComboBox<String>(sortList); //Select algorithm
         sortBox.setSelectedIndex(0);
+    
         JLabel sizeLabel = new JLabel("Size"); //Textbox for array size
-        sizeField = new JTextField(3); //3 Digits
+        JTextField sizeField = new JTextField(3); //3 Digits;
         JLabel leftBoundLabel = new JLabel("Left Bound"); //Left bound
-        lBoundField = new JTextField(6);
+        JTextField lBoundField = new JTextField(6);
         JLabel rightBoundLabel = new JLabel("Right Bound"); //Right bound
-        rBoundField = new JTextField(6);
+        JTextField rBoundField = new JTextField(6);
+
+        ActionListener doUpdate = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                size = Integer.parseInt(sizeField.getText());
+                lBound = Integer.parseInt(lBoundField.getText());
+                rBound = Integer.parseInt(rBoundField.getText());
+            }
+        };
+        updateButton.addActionListener(doUpdate);
+
         typeBox = new JComboBox<String>(typeList);
-        sortBox.setSelectedIndex(0);
+        typeBox.setSelectedIndex(0);
+
         startButton = new JButton("Sort!");
 
         //Add
+        oPanel.add(updateButton);
         oPanel.add(sortBox);
         oPanel.add(sizeLabel);
         oPanel.add(sizeField);
@@ -75,20 +92,10 @@ public class Visual {
 
     public void prepare() {
         while (!startButton.isSelected()) {
-            try {
-                sortType = sortBox.getItemAt(sortBox.getSelectedIndex());
-                size = Integer.parseInt(sizeField.getText());
-                lBound = Integer.parseInt(lBoundField.getText());
-                rBound = Integer.parseInt(rBoundField.getText());
-                arrayType = typeBox.getItemAt(typeBox.getSelectedIndex());
-            }
-            catch (Exception e) {
-                continue;
-            }
+            sortType = sortBox.getItemAt(sortBox.getSelectedIndex());
+            arrayType = typeBox.getItemAt(typeBox.getSelectedIndex());
 
-            System.out.println(size);
-            sizeLabel.setText(String.valueOf(size));
-            frame.add(BorderLayout.CENTER, sizeLabel);
+            System.out.println(size + ", " + lBound + ", " + rBound);
         }
     }
 
@@ -99,8 +106,11 @@ public class Visual {
 
 
     }
-    
-    public void initArray(int cells) {
 
+    public void initArray(int cells) {
+        Graphics g = c.getGraphics();
+        cellArray = new int[size];
+
+        g.setColor(Color.WHITE);
     }
 }
