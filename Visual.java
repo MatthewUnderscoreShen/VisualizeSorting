@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import javax.swing.*;
 
 public class Visual {
@@ -12,13 +11,14 @@ public class Visual {
     String[] typeList = {"Continuous", "Random"};
 
     JComboBox<String> sortBox;
-    
     JComboBox<String> typeBox;
+
     JButton startButton;
 
     String sortType, arrayType;
     int size, lBound, rBound;
 
+    //25 pixels from the edge of the screen
     int[] cellArray;
 
     public Visual() {
@@ -28,7 +28,8 @@ public class Visual {
     private void initFrame() {
         frame = new JFrame("Sorting");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 600);
+        frame.setSize(1050, 625
+        );
 
         //Canvas?
         c = new Canvas() {
@@ -57,6 +58,8 @@ public class Visual {
                 size = Integer.parseInt(sizeField.getText());
                 lBound = Integer.parseInt(lBoundField.getText());
                 rBound = Integer.parseInt(rBoundField.getText());
+                sortType = sortBox.getItemAt(sortBox.getSelectedIndex());
+                arrayType = typeBox.getItemAt(typeBox.getSelectedIndex());
             }
         };
         updateButton.addActionListener(doUpdate);
@@ -92,10 +95,7 @@ public class Visual {
 
     public void prepare() {
         while (!startButton.isSelected()) {
-            sortType = sortBox.getItemAt(sortBox.getSelectedIndex());
-            arrayType = typeBox.getItemAt(typeBox.getSelectedIndex());
-
-            System.out.println(size + ", " + lBound + ", " + rBound);
+            initArray();
         }
     }
 
@@ -107,7 +107,7 @@ public class Visual {
 
     }
 
-    public void initArray(int cells) {
+    public void initArray() {
         Graphics g = c.getGraphics();
         cellArray = new int[size];
 
