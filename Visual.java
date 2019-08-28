@@ -3,9 +3,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class Visual {
-    JFrame frame;
+public class Visual extends JFrame {
+
     Canvas c;
+    int width, delta;
     
     String[] sortList = {"Bubble Sort", "Quicksort", "Merge Sort"};
     String[] typeList = {"Continuous", "Random"};
@@ -22,18 +23,16 @@ public class Visual {
     int[] cellArray;
 
     public Visual() {
-        initFrame();
-    }
-
-    private void initFrame() {
-        frame = new JFrame("Sorting");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1050, 625
-        );
+        super("Sorting");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1050, 625);
 
         //Canvas?
         c = new Canvas() {
-            public void paint(Graphics g) {}
+            public void paint(Graphics g) {
+                g.setColor(Color.WHITE);
+                g.fillRect(25, 25, 100, 100);
+            }
         };
         c.setBackground(Color.BLACK);
 
@@ -81,10 +80,10 @@ public class Visual {
         oPanel.add(typeBox);
         oPanel.add(startButton);
 
-        frame.add(c);
-        frame.add(BorderLayout.SOUTH, oPanel);
+        add(c);
+        add(BorderLayout.SOUTH, oPanel);
 
-        frame.setVisible(true);
+        setVisible(true);
     }
 
     public void initCells(int size, int low, int high) {
@@ -95,7 +94,7 @@ public class Visual {
 
     public void prepare() {
         while (!startButton.isSelected()) {
-            initArray();
+            initArray(c.getGraphics());
         }
     }
 
@@ -107,10 +106,14 @@ public class Visual {
 
     }
 
-    public void initArray() {
-        Graphics g = c.getGraphics();
+    public void initArray(Graphics g) {
         cellArray = new int[size];
 
         g.setColor(Color.WHITE);
+
+        for (int i = 0; i < cellArray.length; i++) {
+            g.fillRect(25+5*i, 575+15*i, 10, 575-15*i);
+            System.out.println("kms");
+        }
     }
 }
