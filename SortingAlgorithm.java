@@ -24,10 +24,6 @@ public class SortingAlgorithm {
 
     //Every algorithm overrides this
     public void run() {}
-
-    public int[] getArray() { //Temporary
-        return theArray;
-    }
 }
 
 /*
@@ -54,7 +50,8 @@ class BubbleSort extends SortingAlgorithm {
                     theArray[j] = theArray[j+1];
                     theArray[j+1] = holder;
                 }
-                //vis.updateVisual();
+                vis.updateVisual(j, theArray[j]);
+                vis.updateVisual(j+1, theArray[j+1]);
             }
             limit--;
         }
@@ -107,7 +104,7 @@ class QuickSort extends SortingAlgorithm {
             }
             else
                 copy[--topIndex - leftBound] = theArray[i];
-            //vis.updateVisual();
+            vis.updateVisual(i, theArray[i]);
         }
         updateTheArray();
 

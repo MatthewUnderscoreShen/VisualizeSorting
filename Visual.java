@@ -1,13 +1,22 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 import javax.swing.*;
 
 public class Visual extends JFrame {
 
     Canvas c;
-    int width, delta;
-    
+    int x, height;
+    int y = 625;
+    int width = 10;
+    int delta = 3;
+    //25 pixels from the edge of the screen
+    int[] cellArray;
+    Random rand = new Random();
+
+    int[] jankArray; //A jacky solution to a problem caused by bad framework
+
     String[] sortList = {"Bubble Sort", "Quicksort", "Merge Sort"};
     String[] typeList = {"Continuous", "Random"};
 
@@ -19,9 +28,6 @@ public class Visual extends JFrame {
     String sortType, arrayType;
     int size, lBound, rBound;
 
-    //25 pixels from the edge of the screen
-    int[] cellArray;
-
     public Visual() {
         super("Sorting");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,10 +35,7 @@ public class Visual extends JFrame {
 
         //Canvas?
         c = new Canvas() {
-            public void paint(Graphics g) {
-                g.setColor(Color.WHITE);
-                g.fillRect(25, 25, 100, 100);
-            }
+            public void paint(Graphics g) {}
         };
         c.setBackground(Color.BLACK);
 
@@ -86,34 +89,55 @@ public class Visual extends JFrame {
         setVisible(true);
     }
 
-    public void initCells(int size, int low, int high) {
-        cellArray = new int[size];
+    @Override
+    public void paintComponents(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.fillRect(x, y, width, height);
     }
 
     JLabel sizeLabel = new JLabel();
 
     public void prepare() {
         while (!startButton.isSelected()) {
-            initArray(c.getGraphics());
+            try {
+                initArray();
+            }
+            catch (NullPointerException e) {
+                System.out.print("");
+            }
         }
     }
 
-    public void updateVisual(int cell) { //Updates 1 cell at a time
-        Graphics g = c.getGraphics();
-
-        g.setColor(Color.WHITE);
-
-
+    public void updateVisual(int cell, int value) { //Updates 1 cell at a time
+        x = 25 + (width + delta) * cell;
+        height = 25 + (600 / (rBound - lBound)) * value;
+        paintComponents(c.getGraphics());
     }
 
-    public void initArray(Graphics g) {
+    public void initArray() throws NullPointerException {
+        Graphics g = c.getGraphics();
         cellArray = new int[size];
+        jankArray = new int[size];
+        rBound = lBound + cellArray.length;
 
-        g.setColor(Color.WHITE);
+        if (arrayType.equals("Continuous")) {
+            for (int i = 0; i < cellArray.length; i++) {
+                height = 25 + (int)(600/(rBound - lBound)) * i;
+                x = 25 + (width + delta) * i;
+            
+                printComponents(g);
+                System.out.println("kms");
+            }
+        }
+        else {
+            for (int i = 0; i < cellArray.length; i++) {
+                jankArray[i] = rand.nextInt(rBound - lBound) + lBound;
+                height = 25 + (int)(600/(rBound - lBound)) * jankArray[i];
+                x = 25 + (width + delta) * i;
 
-        for (int i = 0; i < cellArray.length; i++) {
-            g.fillRect(25+5*i, 575+15*i, 10, 575-15*i);
-            System.out.println("kms");
+                printComponents(g);
+                System.out.println("kms");
+            }
         }
     }
 }

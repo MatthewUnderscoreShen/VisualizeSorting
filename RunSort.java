@@ -3,7 +3,7 @@ public class RunSort{
     static Visual vis;
     static Util util = new Util();
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         vis = new Visual();
 
         vis.prepare();
