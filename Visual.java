@@ -35,7 +35,10 @@ public class Visual extends JFrame {
 
         //Canvas?
         c = new Canvas() {
-            public void paint(Graphics g) {}
+            public void paint(Graphics g) {
+                //g.setColor(Color.GREEN);
+                //g.fillRect(50, 50, 200, 200);
+            }
         };
         c.setBackground(Color.BLACK);
 
@@ -122,7 +125,7 @@ public class Visual extends JFrame {
 
         if (arrayType.equals("Continuous")) {
             for (int i = 0; i < cellArray.length; i++) {
-                height = 25 + (int)(600/(rBound - lBound)) * i;
+                height = 25 + (int)((rBound - lBound)/600) * i;
                 x = 25 + (width + delta) * i;
             
                 printComponents(g);
@@ -132,7 +135,7 @@ public class Visual extends JFrame {
         else {
             for (int i = 0; i < cellArray.length; i++) {
                 jankArray[i] = rand.nextInt(rBound - lBound) + lBound;
-                height = 25 + (int)(600/(rBound - lBound)) * jankArray[i];
+                height = 25 + (int)((rBound - lBound)/600) * jankArray[i];
                 x = 25 + (width + delta) * i;
 
                 printComponents(g);
