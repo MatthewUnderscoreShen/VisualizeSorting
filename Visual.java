@@ -7,10 +7,8 @@ import javax.swing.*;
 public class Visual extends JFrame {
 
     Canvas c;
-    int x, height;
-    int y = 625;
-    int width = 10;
-    int delta = 3;
+    int x, y, width, height;
+    int delta = 1;
     //25 pixels from the edge of the screen
     int[] cellArray;
     Random rand = new Random();
@@ -28,10 +26,12 @@ public class Visual extends JFrame {
     String sortType, arrayType;
     int size, lBound, rBound;
 
+    boolean isListening = true;
+
     public Visual() {
         super("Sorting");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1050, 625);
+        setSize(1060, 725);
 
         //Canvas?
         c = new Canvas() {
@@ -60,11 +60,20 @@ public class Visual extends JFrame {
         ActionListener doUpdate = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                size = Integer.parseInt(sizeField.getText());
-                lBound = Integer.parseInt(lBoundField.getText());
-                rBound = Integer.parseInt(rBoundField.getText());
-                sortType = sortBox.getItemAt(sortBox.getSelectedIndex());
-                arrayType = typeBox.getItemAt(typeBox.getSelectedIndex());
+                if (isListening) {
+                    size = Integer.parseInt(sizeField.getText());
+                    lBound = Integer.parseInt(lBoundField.getText());
+                    rBound = Integer.parseInt(rBoundField.getText());
+                    sortType = sortBox.getItemAt(sortBox.getSelectedIndex());
+                    arrayType = typeBox.getItemAt(typeBox.getSelectedIndex());
+
+                    try {
+                        initArray();
+                    }
+                    catch (NullPointerException | ArithmeticException ex) {
+                        System.out.print("");
+                    }
+                }
             }
         };
         updateButton.addActionListener(doUpdate);
@@ -92,44 +101,42 @@ public class Visual extends JFrame {
         setVisible(true);
     }
 
-    @Override
-    public void paintComponents(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.fillRect(x, y, width, height);
-    }
-
     JLabel sizeLabel = new JLabel();
 
     public void prepare() {
         while (!startButton.isSelected()) {
-            try {
-                initArray();
-            }
-            catch (NullPointerException e) {
-                System.out.print("");
-            }
+            System.out.print("");
         }
+
+        isListening = false;
     }
 
     public void updateVisual(int cell, int value) { //Updates 1 cell at a time
+        Graphics g = c.getGraphics();
         x = 25 + (width + delta) * cell;
-        height = 25 + (600 / (rBound - lBound)) * value;
-        paintComponents(c.getGraphics());
+        height = 5 + (650 / (rBound - lBound)) * value;
+        y = 625 - height;
+
+        g.setColor(Color.BLACK);
+        g.fillRect(x-1, 0, width+2, 725);
+
+        g.setColor(Color.WHITE);
+        g.fillRect(x, y, width, height);
     }
 
-    public void initArray() throws NullPointerException {
+    public void initArray() throws NullPointerException, ArithmeticException {
         Graphics g = c.getGraphics();
         cellArray = new int[size];
         jankArray = new int[size];
         rBound = lBound + cellArray.length;
+        width = (int)((1000 - delta * cellArray.length) / cellArray.length);
 
         if (arrayType.equals("Continuous")) {
             for (int i = 0; i < cellArray.length; i++) {
-                height = 25 + (int)((rBound - lBound)/600) * i;
-                x = 25 + (width + delta) * i;
-            
-                printComponents(g);
-                System.out.println("kms");
+                //height = 25 + (int)((rBound - lBound)/600) * i;
+                //x = 25 + (width + delta) * i;
+                
+                updateVisual(i, i);
             }
         }
         else {
@@ -142,5 +149,25 @@ public class Visual extends JFrame {
                 System.out.println("kms");
             }
         }
+    }
+
+    public int getArraySize() {
+        return size;
+    }
+
+    public int getLBound() {
+        return lBound;
+    }
+
+    public int getRBound() {
+        return rBound;
+    }
+
+    public boolean getRandom() {
+        return arrayType.equals("Random");
+    }
+
+    public String getSort() {
+        return sortType;
     }
 }

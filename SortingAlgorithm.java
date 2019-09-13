@@ -10,6 +10,7 @@ public class SortingAlgorithm {
 
     //Init theArray in the superconstructor
     public SortingAlgorithm(int size, int lBound, int rBound, boolean isRandom, Visual vis) {
+        int randIndex;
         this.vis = vis;
         theArray = new int[size];
         if (isRandom) {
@@ -17,8 +18,10 @@ public class SortingAlgorithm {
                 theArray[i] = lBound + rand.nextInt(rBound - lBound);
         }
         else {
-            for (int i = 0; i < theArray.length; i++)
+            for (int i = 0; i < theArray.length; i++) {
+                randIndex = rand.nextInt(theArray.length);
                 theArray[i] = lBound++;
+            }
         }
     }
 
