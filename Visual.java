@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.swing.*;
 
 public class Visual extends JFrame {
+    int waitTime = 10;
 
     Canvas c;
     int x, y, width, height;
@@ -20,8 +21,6 @@ public class Visual extends JFrame {
 
     JComboBox<String> sortBox;
     JComboBox<String> typeBox;
-
-    JButton startButton;
 
     String sortType, arrayType;
     int size, lBound, rBound;
@@ -57,6 +56,7 @@ public class Visual extends JFrame {
         JLabel rightBoundLabel = new JLabel("Right Bound"); //Right bound
         JTextField rBoundField = new JTextField(6);
 
+        //ActionListener for the updateButton
         ActionListener doUpdate = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,7 +81,15 @@ public class Visual extends JFrame {
         typeBox = new JComboBox<String>(typeList);
         typeBox.setSelectedIndex(0);
 
-        startButton = new JButton("Sort!");
+        JButton startButton = new JButton("Sort!");
+
+        ActionListener checkStart = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isListening = false;
+            }
+        };
+        startButton.addActionListener(checkStart);
 
         //Add
         oPanel.add(updateButton);
@@ -104,15 +112,14 @@ public class Visual extends JFrame {
     JLabel sizeLabel = new JLabel();
 
     public void prepare() {
-        while (!startButton.isSelected()) {
+        while (isListening) {
             System.out.print("");
         }
-
-        isListening = false;
     }
 
     public void updateVisual(int cell, int value) { //Updates 1 cell at a time
         Graphics g = c.getGraphics();
+        
         x = 25 + (width + delta) * cell;
         height = 5 + (650 / (rBound - lBound)) * value;
         y = 625 - height;
@@ -120,6 +127,16 @@ public class Visual extends JFrame {
         g.setColor(Color.BLACK);
         g.fillRect(x-1, 0, width+2, 725);
 
+        g.setColor(Color.RED);
+        g.fillRect(x, y, width, height);
+
+        try {
+            Thread.sleep(waitTime);
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+        
         g.setColor(Color.WHITE);
         g.fillRect(x, y, width, height);
     }
@@ -169,5 +186,9 @@ public class Visual extends JFrame {
 
     public String getSort() {
         return sortType;
+    }
+
+    public void setWaitTime(int time) {
+        waitTime = time;
     }
 }

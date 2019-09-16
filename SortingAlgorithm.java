@@ -10,18 +10,49 @@ public class SortingAlgorithm {
 
     //Init theArray in the superconstructor
     public SortingAlgorithm(int size, int lBound, int rBound, boolean isRandom, Visual vis) {
-        int randIndex;
         this.vis = vis;
         theArray = new int[size];
-        if (isRandom) {
+
+        if (isRandom) { //Random init
             for (int i = 0; i < theArray.length; i++)
                 theArray[i] = lBound + rand.nextInt(rBound - lBound);
         }
-        else {
+        else { //Continuous init
             for (int i = 0; i < theArray.length; i++) {
-                randIndex = rand.nextInt(theArray.length);
                 theArray[i] = lBound++;
             }
+        }
+
+        randomizeArray(theArray); //Randomizes the array
+
+        for (int i = 0; i < theArray.length; i++)
+            vis.updateVisual(i, theArray[i]);
+
+        System.out.print("\n\t");
+        for (int v : theArray)
+            System.out.print(v + " ");
+        System.out.println();
+    }
+
+    private void randomizeArray(int[] array) {
+        Integer[] indArr = new Integer[array.length];
+        int randIndex;
+
+        for (int i = 0; i < array.length; i++) {
+            randIndex = rand.nextInt(array.length);
+            if (indArr[randIndex] != null) {
+                i--;
+                continue;
+            }
+            indArr[randIndex] = i;
+        }
+
+        int[] holderArray = new int[array.length];
+        for (int i = 0; i < holderArray.length; i++)
+            holderArray[i] = array[indArr[i]];
+
+        for (int i = 0; i < array.length; i++) {
+            array[i] = holderArray[i];
         }
     }
 

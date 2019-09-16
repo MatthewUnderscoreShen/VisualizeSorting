@@ -14,7 +14,7 @@ public class RunSort{
         int rBound = vis.getRBound();
         boolean isRandom = vis.getRandom();
         String sortType = vis.getSort();
-        
+        System.out.println("\n--- NOW SORTING --- NOW SORTING --- NOW SORTING ---");
         switch(sortType) {
             case "Bubble Sort":
                 sort = new BubbleSort(size, lBound, rBound, isRandom, vis);
@@ -28,5 +28,12 @@ public class RunSort{
             default:
                 System.out.println("How????");
         }
+
+        Thread.sleep(1000);
+        vis.setWaitTime(1);
+
+        sort.run();
+
+        util.printArray(sort.theArray);
     }
 }
