@@ -138,9 +138,13 @@ class QuickSort extends SortingAlgorithm {
             }
             else
                 copy[--topIndex - leftBound] = theArray[i];
+            //vis.updateVisual(i, theArray[i]);
+        }
+
+        updateTheArray();
+        for (int i = leftBound; i < rightBound; i++) {
             vis.updateVisual(i, theArray[i]);
         }
-        updateTheArray();
 
         //Setting hold values
         rightHold = rightBound;
@@ -190,8 +194,21 @@ class QuickSort extends SortingAlgorithm {
 }
 
 class MergeSort extends SortingAlgorithm {
+    int[] arrayA, arrayB;
+    int half;
+    int leftBound, rightBound;
 
     public MergeSort(int size, int lBound, int rBound, boolean isRandom, Visual vis) {
         super(size, lBound, rBound, isRandom, vis);
+        half = theArray.length / 2;
+        arrayA = new int[half];
+        arrayB = new int[theArray.length - half];
+    }
+
+    @Override
+    public void run() {
+        int lBound, rBound, mid;
+
+        
     }
 }

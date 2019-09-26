@@ -5,27 +5,25 @@ import java.util.Random;
 import javax.swing.*;
 
 public class Visual extends JFrame {
-    int waitTime = 10;
+    private int waitTime = 10;
+    private boolean running = true;
 
-    Canvas c;
-    int x, y, width, height;
-    int delta = 1;
+    private Canvas c;
+    private int x, y, width, height;
+    private int delta = 1;
     //25 pixels from the edge of the screen
-    int[] cellArray;
-    Random rand = new Random();
+    private int[] cellArray;
+    private Random rand = new Random();
 
-    int[] jankArray; //A jacky solution to a problem caused by bad framework
+    private int[] jankArray; //A jacky solution to a problem caused by bad framework
 
-    String[] sortList = {"Bubble Sort", "Quicksort", "Merge Sort"};
-    String[] typeList = {"Continuous", "Random"};
+    private String[] sortList = {"Bubble Sort", "Quicksort", "Merge Sort"};
+    private String[] typeList = {"Continuous", "Random"};
 
-    JComboBox<String> sortBox;
-    JComboBox<String> typeBox;
+    private String sortType, arrayType;
+    private int size, lBound, rBound;
 
-    String sortType, arrayType;
-    int size, lBound, rBound;
-
-    boolean isListening = true;
+    private boolean isListening = true;
 
     public Visual() {
         super("Sorting");
@@ -44,11 +42,24 @@ public class Visual extends JFrame {
         //Setting part
         JPanel oPanel = new JPanel();
 
+        JButton exitButton = new JButton("Exit");
+
+        ActionListener exitProgram = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                running = false;
+                System.out.println("\n\n---EXITING---\n");
+            }
+        };
+        exitButton.addActionListener(exitProgram);
+
         JButton updateButton = new JButton("Apply");
 
-        sortBox = new JComboBox<String>(sortList); //Select algorithm
+        JComboBox<String> sortBox = new JComboBox<String>(sortList); //Select algorithm
         sortBox.setSelectedIndex(0);
-    
+        JComboBox<String> typeBox = new JComboBox<String>(typeList);
+        typeBox.setSelectedIndex(0);
+
         JLabel sizeLabel = new JLabel("Size"); //Textbox for array size
         JTextField sizeField = new JTextField(3); //3 Digits;
         JLabel leftBoundLabel = new JLabel("Left Bound"); //Left bound
@@ -78,8 +89,7 @@ public class Visual extends JFrame {
         };
         updateButton.addActionListener(doUpdate);
 
-        typeBox = new JComboBox<String>(typeList);
-        typeBox.setSelectedIndex(0);
+        
 
         JButton startButton = new JButton("Sort!");
 
@@ -92,6 +102,7 @@ public class Visual extends JFrame {
         startButton.addActionListener(checkStart);
 
         //Add
+        oPanel.add(exitButton);
         oPanel.add(updateButton);
         oPanel.add(sortBox);
         oPanel.add(sizeLabel);
@@ -112,8 +123,8 @@ public class Visual extends JFrame {
     JLabel sizeLabel = new JLabel();
 
     public void prepare() {
-        while (isListening) {
-            System.out.print("");
+        while (isListening && running) {
+            System.out.println("waiting");
         }
     }
 
@@ -188,7 +199,15 @@ public class Visual extends JFrame {
         return sortType;
     }
 
+    public boolean isRunning() {
+        return running;
+    }
+
     public void setWaitTime(int time) {
         waitTime = time;
+    }
+
+    public void setListening(boolean isListening) {
+        this.isListening = isListening;
     }
 }
