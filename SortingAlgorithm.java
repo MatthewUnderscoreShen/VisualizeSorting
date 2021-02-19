@@ -210,7 +210,7 @@ class MergeSort extends SortingAlgorithm {
         int lBound, rBound, mid;
 
         for (int i = 0; i < theArray.length; i++) {
-            (i < half) ? (theArray[i] = arrayA[i]) : (theArray[i] = arrayB[i]);
+            //(i < half) ? (theArray[i] = arrayA[i]) : (theArray[i] = arrayB[i]);
         }
     }
 }
